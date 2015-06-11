@@ -1,2 +1,4 @@
-# multimedia-ekuatorial.bukapeta.com
-LIMA CERITA TENTANG KRISIS HUTAN DI INDONESIA - STORIES BEYOND THE PIXELS
+gfw-ekuatorial
+==============
+
+Nothing to do here

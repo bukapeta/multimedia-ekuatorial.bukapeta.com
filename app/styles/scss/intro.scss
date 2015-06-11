@@ -1,0 +1,310 @@
+/**
+ *
+ * Main stylesheet for GFW Ekuatorial Media Packages Intro Page.
+ *
+ * @author Ekuatorial Team
+ *
+ * Ekuatorial.com (2014)
+ *
+ */
+
+@import "compass/css3";
+@import "variables";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.intro-container {
+  height: 100%;
+  width: 100%;
+}
+
+.intro-video {
+  // Full page video background: http://demosthenes.info/blog/777/Create-Fullscreen-HTML5-Page-Background-Video
+  background: url('../../videos/posters/intro-bg.jpg') no-repeat;
+  background-size: cover;
+
+  min-width: 100%;
+  min-height: 100%;
+
+  width: auto;
+  height: auto;
+
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: -100;
+}
+
+.mute-button {
+  @include transform(scale(.4));
+  @include transition(opacity .3s);
+  background: url('../img/icons.png') no-repeat;
+  background-position: 6px -85px;
+  cursor: pointer;
+  height: 70px;
+  opacity: 0.7;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 72px;
+  z-index: 200;
+
+  &.muted {
+    background-position: -13px 8px;
+  }
+
+  &:hover {
+    opacity: 0.3;
+  }
+}
+
+.intro-overlay {
+  min-height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.intro-branding__logo {
+  background: url('../img/ekuatorial-logo-grey.png') no-repeat;
+  height: 50px;
+  margin: 50px auto 12px;
+  text-indent: -9999px;
+  width: 33px;
+}
+
+.intro-branding__text {
+  color: rgba(255, 255, 255, .5);
+  font-family: $alegreya-sans-sc;
+  font-size: 18px;
+  margin: 0;
+  text-align: center;
+}
+
+.intro-heading {
+  h1,
+  h2 {
+    color: white;
+    font-family: $montserrat;
+    font-size: 60px;
+    letter-spacing: 5px;
+    line-height: 60px;
+    margin: 5px 0 40px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-size: 28px;
+    color: rgba(255, 255, 255, .5);
+    letter-spacing: 2px;
+    margin: 30px 0 5px;
+  }
+}
+
+/// Maps ///
+
+.intro-maps {
+  height: 484px;
+  margin: 0 auto 0; // NOTE: Temporary top margin
+  position: relative;
+  width: 1202px;
+
+  img {
+    opacity: .3;
+  }
+}
+
+%intro-map {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 20;
+}
+
+.map-indonesia {
+  @extend %intro-map;
+  display: block;
+  z-index: 10;
+}
+
+.map-aceh {
+  @extend %intro-map;
+}
+
+.map-riau {
+  @extend %intro-map;
+}
+
+.map-kalteng {
+  @extend %intro-map;
+}
+
+.map-papua {
+  @extend %intro-map;
+}
+
+/// Pins ///
+
+@include keyframes(pin-anim) {
+  0% {
+    @include scale(0.2);
+  }
+  20% {
+    @include scale(1);
+  }
+}
+
+.map-pin {
+  @include border-radius(100px);
+  @include transition(all .3s);
+  @include animation(pin-anim 2s linear 0.5s infinite);
+  background: $pitch-black;
+  border: 4px solid rgba(0, 0, 0, .5);
+  display: block;
+  // Required for transparent border with opaque background color
+  -webkit-background-clip: padding-box; /* for Safari */
+  background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+  height: 18px;
+  opacity: 1;
+  position: absolute;
+  width: 18px;
+  z-index: 30;
+
+  &:before {
+    @include border-radius(100px);
+    background: #000;
+    border: 4px solid #FFF;
+    content: ".";
+    height: 4px;
+    left: 3px;
+    position: absolute;
+    top: 3px;
+    width: 4px;
+    text-indent: -9999px;
+    z-index: 32;
+  }
+
+  &.active {
+    @include animation(none);
+    opacity: 1;
+  }
+}
+
+.map-pin-aceh {
+  left: 38px;
+  top: 57px;
+}
+
+.map-pin-riau {
+  left: 153px;
+  top: 160px;
+  z-index: 100;
+}
+
+.map-pin-tesso {
+  left: 193px;
+  top: 140px;
+}
+
+.map-pin-kalteng {
+  left: 467px;
+  top: 226px;
+}
+
+.map-pin-papua {
+  left: 975px;
+  top: 212px;
+}
+
+.pin-boxes {
+  position: absolute;
+  top: -55px;
+
+  .map-pin-papua & {
+    top: -75px;
+  }
+}
+
+.pin-box {
+  @include transition(width .3s);
+  @include box-shadow(1px 8px 20px rgba(0, 0, 0, .3));
+  font-family: $alegreya-sans-sc;
+  overflow: hidden;
+  padding: 3px 0;
+  position: relative;
+  white-space: nowrap;
+  width: 0;
+
+  span {
+    @include transition(width .3s .2s);
+    display: block;
+    overflow: hidden;
+    margin: 0 7px;
+    width: 0;
+  }
+}
+
+%pin-box-wide-dimensions {
+  .map-pin.active & {
+    width: 320px;
+  }
+
+  .map-pin-kalteng.active & {
+    width: 360px;
+  }
+}
+
+.pin-box-wide {
+  background: white;
+  color: black;
+  margin-bottom: 1px;
+
+  .map-pin-papua & {
+    white-space: normal;
+  }
+
+  @extend %pin-box-wide-dimensions;
+
+  span {
+    @extend %pin-box-wide-dimensions;
+  }
+}
+
+.pin-box-narrow {
+  background: black;
+  color: white;
+  float: left;
+
+  .map-pin.active & {
+    width: 55px;
+  }
+
+  span {
+    .map-pin.active & {
+      width: 55px;
+    }
+  }
+}
+
+.pin-box-small {
+  background: $ekuatorial-red;
+  color: white;
+  float: left;
+
+  .map-pin.active & {
+    width: 130px;
+  }
+
+  span {
+    .map-pin.active & {
+      width: 130px;
+    }
+  }
+}
