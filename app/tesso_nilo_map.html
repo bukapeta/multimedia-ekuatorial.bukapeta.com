@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+
+<!-- jquery -->
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<!-- jquery -->
+
+<!-- Leaflet -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+<!-- Leaflet -->
+
+<!-- UtfGrid -->
+<script src="http://danzel.github.io/Leaflet.utfgrid/src/leaflet.utfgrid.js"></script>
+<!-- UtfGrid -->
+
+<!-- Plugin Measure -->
+<script src="js/measure.js" type="text/javascript"></script> 
+<link href="css/measure.css" rel="stylesheet">
+<!-- Plugin Measure -->
+
+<!-- Plugin Minimap -->
+<script src="js/minimap.js" type="text/javascript"></script> 
+<link href="css/minimap.css" rel="stylesheet">
+<!-- Plugin Minimap -->
+
+<!-- Hightchart -->
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<!-- Hightchart -->
+
+<!-- Style Legend -->
+<style>
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+}
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
+}
+
+.legend {
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+</style>
+
+<div style="height: 450px; width: 100%;">
+  <div id="map" style="height: 450px; width: 59%; float:left"></div>
+  <div id="chart" style="height: 450px; width: 39%; float:right"></div>
+</div>
+
+<script>
+var dataperambahancolumn = [
+  [2001, 2524.85],
+  [2002, 1400.12],
+  [2003, 234.32],
+  [2004, 2458.59],
+  [2005, 3320.48],
+  [2006, 21.35],
+  [2007, 1005.75],
+  [2008, 2635.38],
+  [2009, 2777.72],
+  [2010, 8274.66],
+  [2011, 7964.86],
+  [2012, 8726.26],
+  [2013, 6333.14]
+];
+
+var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {  
+    attribution: 'OpenStreetMap',
+    minZoom: 0,
+    maxZoom: 20,
+});
+
+var hereMap = L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/satellite.day/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+    attribution: 'Here',
+    subdomains: '1234',
+    mapID: 'newest',
+    app_id: 'DemoAppId01082013GAL',
+    app_code: 'AJKnXv84fjrb0KIHawS0Tg',
+    base: 'aerial',
+    minZoom: 0,
+    maxZoom: 20,
+});
+
+var tesso_nilo_2001Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dff23d16856a496222c70a1553822b14edcc7d8f1e0b6e98c05644bb8070647aaa45288e89d8e33e6ba5c33e919e2ec1d5e&z={z}&x={x}&y={y}',{id:0,tahun:2001,perambahan:2524.85});
+
+var tesso_nilo_2002Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dffac671fd82b26b55c4905fded30d4d9186526ed744a0942ebd44fafd4c46696952d733bb2a0aedf148ba0dc7573293bc4&z={z}&x={x}&y={y}',{id:1,tahun:2002,perambahan:1400.12});
+
+var tesso_nilo_2003Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dff95cc510acbe64b12e31a7f5cd009ef2dc3ee0b18492a5a9db6a201dc4ed59ea9d115206598f362e08c07da300dfe8c12&z={z}&x={x}&y={y}',{id:2,tahun:2003,perambahan:234.32});
+
+var tesso_nilo_2004Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dfff1ea764b6756bd3c0f997e8025f3629f40a6ff6679a9f4cd24636ce4385545b28ee9f9eb73461d22f57c4aca43d69f3e&z={z}&x={x}&y={y}',{id:3,tahun:2004,perambahan:2458.59});
+
+var tesso_nilo_2005Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dfffd62423b72ebbf8c24c6cebf9f6432239d537a9aea5f9c9598405cab0c6c835e1d090114681fe1082124dd0f616dc47a&z={z}&x={x}&y={y}',{id:4,tahun:2005,perambahan:3320.48});
+
+var tesso_nilo_2006Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dff0a617f54d080f4bdd9e93ac61174c5265a200c973256a34f70cb30ea94a83d539c211dd20f6acf8f8cdcc1eaed46b7ad&z={z}&x={x}&y={y}',{id:5,tahun:2006,perambahan:21.35});
+
+var tesso_nilo_2007Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dff431eac54ef7da5e573ca444022e2b4431a0314fd286a1b0d14871027ed96f95bf9367752a2cfc4d02b741ffadbfd7064&z={z}&x={x}&y={y}',{id:6,tahun:2007,perambahan:1005.75});
+
+var tesso_nilo_2008Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dffca182590f822ff4c8703aae807f82f9e71da6b1703539eb3c578e2d9dfbb541ed50437491b34065854dc9303e3915751&z={z}&x={x}&y={y}',{id:7,tahun:2008,perambahan:2635.38});
+
+var tesso_nilo_2009Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dff948800447f687885ec05206bb841884a5ffba0a28c2ea6aca5a18b94ada2b1c64801a57cf4f913a95f24e830fa5cd62e&z={z}&x={x}&y={y}',{id:8,tahun:2009,perambahan:2777.72});
+
+var tesso_nilo_2010Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dffab19967475127cce189dc7c6161ad12e9c46fcb64258b6d05e864d9c7ef9848acaa0f4fdd64e8020836c455ebe242663&z={z}&x={x}&y={y}',{id:9,tahun:2010,perambahan:8274.66});
+
+var tesso_nilo_2011Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dffc80e0889add8310a91b770480c5cef0119e25aa1b8e5fd062c87ee7ef0120df7a4f633744d431eaf92ad7506ae5da961&z={z}&x={x}&y={y}',{id:10,tahun:2011,perambahan:7964.86});
+
+var tesso_nilo_2012Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dffd291979223ee27e62e9f18801fbd3b0d6b5cd598ad13bd62cb7b3c413e41e5f5a389cd9eaca9d75e695772b7dcf40229&z={z}&x={x}&y={y}',{id:11,tahun:2012,perambahan:8726.26});
+
+var tesso_nilo_2013Map = L.tileLayer('http://service-tms.local-server.link/?token=c622433c904d03ea0276e5132eb09dff534b9ce0fcc4660e313ba80d903bd6f928c722a0ae41c26a40f44c4a829ab7bfd68159120a62fed1250c90e5f433072d&z={z}&x={x}&y={y}',{id:12,tahun:2013,perambahan:6333.14});
+
+var baseMaps = {
+    'Osm': osmMap,
+    'Here': hereMap,
+};
+
+var overlayMaps = {
+    "Perambahan 2001": tesso_nilo_2001Map,
+    "Perambahan 2002": tesso_nilo_2002Map,
+    "Perambahan 2003": tesso_nilo_2003Map,
+    "Perambahan 2004": tesso_nilo_2004Map,
+    "Perambahan 2005": tesso_nilo_2005Map,
+    "Perambahan 2006": tesso_nilo_2006Map,
+    "Perambahan 2007": tesso_nilo_2007Map,
+    "Perambahan 2008": tesso_nilo_2008Map,
+    "Perambahan 2009": tesso_nilo_2009Map,
+    "Perambahan 2010": tesso_nilo_2010Map,
+    "Perambahan 2011": tesso_nilo_2011Map,
+    "Perambahan 2012": tesso_nilo_2012Map,
+    "Perambahan 2013": tesso_nilo_2013Map
+};
+var map = L.map('map', { center: [-0.22, 101.800637], zoom: 11, layers: [hereMap, tesso_nilo_2001Map, tesso_nilo_2002Map, tesso_nilo_2003Map, tesso_nilo_2004Map, tesso_nilo_2005Map, tesso_nilo_2006Map, tesso_nilo_2007Map, tesso_nilo_2008Map, tesso_nilo_2009Map, tesso_nilo_2010Map, tesso_nilo_2011Map, tesso_nilo_2012Map, tesso_nilo_2013Map]});
+
+layercontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+// Scale map
+L.control.scale().addTo(map);
+
+// Measure
+var measureControl = L.control.measure({ position: 'topleft' });
+    measureControl.addTo(map);
+
+// Minimap
+var miniMap = new L.Control.MiniMap(osmMap).addTo(map);
+
+// Disable drag and zoom handlers.
+map.touchZoom.disable();
+map.doubleClickZoom.disable();
+map.scrollWheelZoom.disable();
+
+//event control layer
+map.on('overlayadd', onOverlayAdd);
+
+map.on('overlayremove', onOverlayRemove);
+
+function onOverlayAdd(e){
+
+  dataperambahancolumn.splice(e.layer.options.id, 0, [e.layer.options.tahun, e.layer.options.perambahan]);
+
+  Dinamicgraph(dataperambahancolumn);
+}
+
+function onOverlayRemove(e){
+
+  function isItemInArray(array, item) {
+      for (var i = 0; i < array.length; i++) {
+          // This if statement depends on the format of your array
+          if (array[i][0] == item[0] && array[i][1] == item[1]) {
+              return i;   // Found it
+          }
+      }
+      return false;   // Not found
+  }
+  
+  var dimanayah = isItemInArray(dataperambahancolumn, [e.layer.options.tahun, e.layer.options.perambahan]);
+  dataperambahancolumn.splice(dimanayah,1);
+  Dinamicgraph(dataperambahancolumn);
+}
+
+// Fungsi chart
+$(function () {
+    $('#chart').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Estimasi Luas Perambahan di Kawasan Tesso Nilo<br>Tahun 2001 - 2013'
+        },
+        subtitle: {
+            text: 'Source: <a href="http://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.1.html">Hansen</a>'
+        },
+        xAxis: {
+            type: 'category',
+            labels: {
+                rotation: -45,
+                style: {
+                    fontSize: '12px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Perambahan (Hactare)'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: 'Perambahan : <b>{point.y:.1f} Hactare</b>'
+        },
+        series: [{
+            name: 'Perambahan',
+            data: dataperambahancolumn,
+            dataLabels: {
+                enabled: true,
+                rotation: -90,
+                color: '#FFFFFF',
+                align: 'right',
+                format: '{point.y:.1f}', // one decimal
+                y: -40, // 10 pixels down from the top
+                style: {
+                    fontSize: '12px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        }]
+    });
+});
+
+function Dinamicgraph(dataperambahancolumn){
+  
+  $(function () {
+      $('#chart').highcharts({
+          chart: {
+              type: 'column'
+          },
+          title: {
+              text: 'Estimasi Luas Perambahan di Kawasan Tesso Nilo<br>Tahun 2001 - 2013'
+          },
+          subtitle: {
+              text: 'Source: <a href="http://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.1.html">Hansen</a>'
+          },
+          xAxis: {
+              type: 'category',
+              labels: {
+                  rotation: -45,
+                  style: {
+                      fontSize: '12px',
+                      fontFamily: 'Verdana, sans-serif'
+                  }
+              }
+          },
+          yAxis: {
+              min: 0,
+              title: {
+                  text: 'Perambahan (Hactare)'
+              }
+          },
+          legend: {
+              enabled: false
+          },
+          tooltip: {
+              pointFormat: 'Perambahan : <b>{point.y:.1f} Hactare</b>'
+          },
+          series: [{
+              name: 'Perambahan',
+              data: dataperambahancolumn,
+              dataLabels: {
+                  enabled: true,
+                  rotation: -90,
+                  color: '#FFFFFF',
+                  align: 'right',
+                  format: '{point.y:.1f}', // one decimal
+                  y: -40, // 10 pixels down from the top
+                  style: {
+                      fontSize: '12px',
+                      fontFamily: 'Verdana, sans-serif'
+                  }
+              }
+          }]
+      });
+  });
+}
+
+// Legenda
+var legend = L.control({position: 'bottomleft'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend');
+
+    div.innerHTML = '<i style="background:#1a9641"></i>2001<br><i style="background:#48ac4e"></i>2002<br><i style="background:#77c25c"></i>2003<br><i style="background:#a6d96a"></i>2004<br><i style="background:#c3e586"></i>2005<br><i style="background:#e1f2a3"></i>2006<br><i style="background:#ffffc0"></i>2007<br><i style="background:#fee4a0"></i>2008<br><i style="background:#fdc980"></i>2009<br><i style="background:#fdae61"></i>2010<br><i style="background:#f07c4a"></i>2011<br><i style="background:#e34a33"></i>2012<br><i style="background:#d7191c"></i>2013<br>';
+
+    return div;
+};
+
+legend.addTo(map);
+</script>
+
+</body>
+</html>
